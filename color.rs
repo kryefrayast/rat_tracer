@@ -1,7 +1,7 @@
 use crate::vec3::Vec3;
 use std::fmt;
 use std::io::{self, Write};
-use std::ops::{Add, Mul};
+use std::ops::{Add, Mul, Div};
 use crate::interval::Interval;
 use rand::Rng;
 
@@ -92,5 +92,12 @@ impl Mul for Color {
     type Output = Self;
     fn mul(self, other: Self) -> Self {
         Color(self.0 * other.0)
+    }
+}
+
+impl Div<f64> for Color {
+    type Output = Self;
+    fn div(self, t: f64) -> Self::Output {
+        Color(self.0 / t)
     }
 }
