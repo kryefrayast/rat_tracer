@@ -27,6 +27,11 @@ pub fn random_double_in_range(min: f64, max: f64) -> f64 {
     rng.gen_range(min..max)
 }
  
+pub fn random_int(min: i32, max: i32) -> i32 {
+    let mut rng = thread_rng();
+    rng.gen_range(min..=max)
+} 
+
 #[macro_export] 
 macro_rules! make_shared {
     ($obj:expr) => {
