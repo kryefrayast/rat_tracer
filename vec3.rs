@@ -1,6 +1,7 @@
 use std::ops::{Add, Sub, Mul, Div, Neg, AddAssign, MulAssign, DivAssign};
 use std::fmt;
-use rand::Rng;
+use rand::{Rng, thread_rng};
+use std::f64::consts::PI;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Vec3 {
@@ -38,6 +39,14 @@ impl Vec3 {
     }
     pub fn reflect(self, n: Vec3) -> Vec3 {
         self - 2.0 * self.dot(n) * n
+    }
+    pub fn random_vec3_in_range(min: f64, max: f64) -> Vec3 {
+        let mut rng = rand::thread_rng();
+        Vec3::new(
+            rng.gen_range(min..max),
+            rng.gen_range(min..max),
+            rng.gen_range(min..max),
+        )
     }
 }
 
@@ -153,15 +162,6 @@ pub fn random_vec3() -> Vec3 {
     )
 }
 
-pub fn random_vec3_in_range(min: f64, max: f64) -> Vec3 {
-    let mut rng = rand::thread_rng();
-    Vec3::new(
-        rng.gen_range(min..max),
-        rng.gen_range(min..max),
-        rng.gen_range(min..max),
-    )
-}
-
 pub fn random_unit_vector() -> Vec3 {
     let mut rng = rand::thread_rng();
     
@@ -217,3 +217,28 @@ pub fn random_in_unit_disk() -> Vec3 {
 }
 
 pub type Point3 = Vec3;
+
+impl std::ops::Index<usize> for Vec3 {
+    type Output = f64;
+    fn index(&self, i: usize) -> &f64 {
+        match i {
+            0 => &self.e[0],
+            1 => &self.e[1],
+            _ => &self.e[2],
+        }
+    }
+}
+
+pub fn random_cosine_direction() -> Vec3 {
+    let mut rng = thread_rng();
+    let mut r1: f64 = rng.gen_range(0.0..1.0);
+    let mut r2: f64 = rng.gen_range(0.0..1.0);
+
+    let phi = 2.0 * PI * r1;
+
+    let x = phi.cos() * r2.sqrt();
+    let y = phi.sin() * r2.sqrt();
+    let z = (1.0 - r2).sqrt();
+        
+    Vec3::new(x, y, z)
+}
